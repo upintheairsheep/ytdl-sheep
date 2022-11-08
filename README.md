@@ -1,27 +1,12 @@
 <!-- MANPAGE: BEGIN EXCLUDED SECTION -->
 <div align="center">
 
-# YTDL-PATCHED
-A command-line program to download videos from YouTube and many other [video platforms](supportedsites.md)
+# ytdl-sheep
+A command-line program to download videos and audio from YouTube and many other [video and audio platforms](supportedsites.md)
 
 </div>
 <!-- MANPAGE: END EXCLUDED SECTION -->
 
-## MIRRORS
-- ~~https://github.com/Lesmiscore/ytdl-patched (passed away)~~
-- https://github.com/ytdl-patched/ytdl-patched (primary)
-- https://bitbucket.org/Lesmiscore/ytdl-patched (secondary)
-- https://forge.tedomum.net/Lesmiscore/ytdl-patched (secondary)
-- https://gitlab.com/lesmi_the_goodness/ytdl-patched (secondary)
-- https://gitea.com/Lesmiscore/ytdl-patched (secondary)
-- https://git.sr.ht/~nao20010128nao/ytdl-patched (secondary)
-  - manually mirrored at every git push
-- https://codeberg.org/Lesmiscore/ytdl-patched (secondary)
-- https://gitgud.io/Lesmiscore/ytdl-patched (secondary)
-- [In my Keybase account](https://book.keybase.io/git) (secondary)
-  - spoiler: you can clone it with `git clone keybase://public/nao20010128nao/ytdl-patched`
-- https://bookish-octo-barnacle.vercel.app/ (just for fun, no longer synced)
-- https://ytdl-patched.netlify.app/ (just for fun, no longer synced)
 
 <!-- MARKER BEGIN -->
 
@@ -33,12 +18,13 @@ A command-line program to download videos from YouTube and many other [video pla
 
 <!-- MARKER END -->
 
-ytdl-patched is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork based on [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+ytdl-sheep is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork based on [ytdl-patched](https://github.com/yt-dlp/yt-dlp).
 
 <!-- MANPAGE: MOVE "USAGE AND OPTIONS" SECTION HERE -->
 
 <!-- MANPAGE: BEGIN EXCLUDED SECTION -->
 * [NEW FEATURES](#new-features)
+    * [NEW FEATURES IN ytdl-sheep](#new-features-in-ytdl-sheep)
     * [NEW FEATURES IN YTDL-PATCHED](#new-features-in-ytdl-patched)
     * [NEW FEATURES IN YT-DLP](#new-features-in-yt-dlp)
     * [Differences in default behavior](#differences-in-default-behavior)
@@ -89,6 +75,8 @@ ytdl-patched is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork base
 **Disclaimer:** ytdl-patched does exist for my use, so there's no absolute warranty for anything. Use yt-dlp if you don't like it.
 
 # NEW FEATURES
+## NEW FEATURES IN ytdl-sheep
+*coming soon
 ## NEW FEATURES IN YTDL-PATCHED
 The major new features from the latest release of [yt-dlp](https://github.com/yt-dlp/yt-dlp) are:
 
