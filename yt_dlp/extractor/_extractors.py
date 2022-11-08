@@ -9,7 +9,7 @@ from .youtube import (  # Youtube is moved to the top to improve performance
     YoutubeTabIE,
     YoutubeLivestreamEmbedIE,
     YoutubePlaylistIE,
-    YoutubeRecommendedIE,
+    YoutubeRecommendedIE, 
     YoutubeSearchDateIE,
     YoutubeSearchIE,
     YoutubeSearchURLIE,
@@ -1495,6 +1495,7 @@ from .reuters import ReutersIE
 from .reverbnation import ReverbNationIE
 from .rice import RICEIE
 from .rmcdecouverte import RMCDecouverteIE
+from .roblox import RobloxIE
 from .rockstargames import RockstarGamesIE
 from .rokfin import (
     RokfinIE,
