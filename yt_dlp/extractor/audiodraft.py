@@ -23,6 +23,16 @@ class AudiodraftBaseIE(InfoExtractor):
             'like_count': int_or_none(data_json.get('entry_likes')),
             'average_rating': int_or_none(data_json.get('entry_rating')),
         }
+            url_encode = url.encode()
+            data_json = self._download_json(
+            'https://api-public.addthis.com/url/shares.json?url=', url_encode,
+            headers={
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Requested-With': 'XMLHttpRequest',
+            }, '.encode('utf-8'))
+        return {
+            'repost_count': data_json.get('shares'),
+        }
 
 
 class AudiodraftCustomIE(AudiodraftBaseIE):
@@ -85,6 +95,16 @@ class AudiodraftGenericIE(AudiodraftBaseIE):
             'uploader_id': '19452',
             'average_rating': 4,
             'like_count': int,
+            
+        },
+        'url': 'http://nokiatune.audiodraft.com/entry/2',
+        'info_dict': {
+            'uploader': 'Posthouse Tuomi'
+        },
+        'params': {
+            'skip_download': True,
+        },
+        'expected_warnings': ['Withdrawn by the composer'],
         },
     }]
 
