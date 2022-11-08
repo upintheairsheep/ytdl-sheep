@@ -903,6 +903,10 @@ from .lnkgo import (
     LnkIE,
 )
 from .localnews8 import LocalNews8IE
+from .loom import (
+    LoomIE,
+    LoomFolderIE
+)
 from .lovehomeporn import LoveHomePornIE
 from .lrt import (
     LRTVODIE,
