@@ -6371,6 +6371,8 @@ class YoutubeShortsAudioPivotIE(InfoExtractor):
             ie=YoutubeTabIE)
     
 class YoutubeRelatedVideosIE(InfoExtractor):
+    # Source: https://github.com/yt-dlp/yt-dlp/issues/3590#issuecomment-1113900840
+    # Note: I am using this project to learn programming, however do not own a device capable of running python, only a school managed laptop and 2 iOS-based devices with absolutely to money for Pythonsia: expect errors.
     IE_DESC = 'YouTube Related Videos'
     IE_NAME = 'youtube:relatedvideos'
     _VALID_URL = r'r'ytrel(?:ated(?:videos)):(?:https?://(?:www\.)?youtube\.com/watch\?v=)P<id>[0-9A-Za-z_-]{11}$''
@@ -6395,7 +6397,7 @@ class YoutubeRelatedVideosIE(InfoExtractor):
                 print(vid["videoId"])  # video id
                 print(vid["title"]["simpleText"])  # video title
                 break
-
+    return self.playlist_result(self._entries(videoId, title) videoId, title)
 
 class YoutubeTruncatedURLIE(InfoExtractor):
     IE_NAME = 'youtube:truncated_url'
