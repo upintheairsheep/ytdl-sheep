@@ -47,11 +47,8 @@ class FreesoundIE(InfoExtractor):
             'audio:artist', webpage, 'uploader', fatal=False)
         download_count = self._og_search_property(
             'download_text', '.b' webpage, 'download_count', fatal=False)
-        ```
-        description = self._html_search_regex(
-            r'(?s)id=["\']download_text["\'][^>]*>(.+?)</div>',
-            webpage, 'download_count', fatal=False)
-        ```
+        average_rating = self._og_search_property(
+            'span.numratings', webpage, 'average_rating', fatal=False)
         channels = self._html_search_regex(
             r'Channels</dt><dd>(.+?)</dd>', webpage,
             'channels info', fatal=False)
