@@ -7,7 +7,7 @@ from ..utils import (
     get_element_by_id,
     unified_strdate,
 )
-
+from .playlistbase import PlaylistBaseIE
 
 class FreesoundIE(InfoExtractor):
     _VALID_URL = r'https?://(?:www\.)?freesound\.org/people/[^/]+/sounds/(?P<id>[^/]+)'
@@ -27,6 +27,7 @@ class FreesoundIE(InfoExtractor):
     }
 
     def _real_extract(self, url):
+    # Todo: extract copyright info, geotags, and possibly comments
         audio_id = self._match_id(url)
 
         webpage = self._download_webpage(url, audio_id)
@@ -44,7 +45,12 @@ class FreesoundIE(InfoExtractor):
         upload_date = unified_strdate(get_element_by_id('sound_date', webpage))
         uploader = self._og_search_property(
             'audio:artist', webpage, 'uploader', fatal=False)
-
+        download_count = self._og_search_property(
+            'download_text', 'a' webpage, 'download_count', fatal=False)
+        average_rating = self._og_search_property(
+            'span.numratings', webpage, 'average_rating', fatal=False)
+        licence = self._og_search_property(
+            'sound_licence', webpage, 'licence', fatal=False)
         channels = self._html_search_regex(
             r'Channels</dt><dd>(.+?)</dd>', webpage,
             'channels info', fatal=False)
@@ -72,6 +78,27 @@ class FreesoundIE(InfoExtractor):
             'duration': duration,
             'uploader': uploader,
             'upload_date': upload_date,
+            'download_count': download_count,
             'tags': tags,
             'formats': formats,
         }
+
+
+class FreesoundPlaylistIE(PlaylistBaseIE):
+    # Source: https://github.com/yt-dlp/yt-dlp/issues/4161#issuecomment-1166157842
+    # Todo: Add metadata: profile pic, info
+    _VALID_URL = r'https?://(?:www\.)?freesound\.org/people/(?P<person>[^/]+)/(?P<type>downloaded_sounds|packs)/(?P<id>[^/]*)'
+
+    _ITEM_RE = r'''(?s)<div\b[^>]+\bclass\s*=\s*("|')sound_filename\1[^>]*>\s*<a\b[^>]+\bclass\s*=\s*("|')title\2[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\3).)+)'''
+    _NEXT_RE = r'''<a\b[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\1).)+)[^>]+\btitle\s*=\s*["']Next\s+Page'''
+    _ITEM_IE = 'Freesound'
+    ```
+    def _real_extract(self, url):
+    
+       
+        title = self._og_search_property('audio:title', webpage, 'username')
+
+        description = self._html_search_regex(
+            r'(?s)id=["\']sound_description["\'][^>]*>(.+?)</div>',
+            webpage, 'description', fatal=False)
+     ```
