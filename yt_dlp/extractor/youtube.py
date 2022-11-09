@@ -6356,6 +6356,19 @@ class YoutubeShortsAudioPivotIE(InfoExtractor):
         'only_matching': True,
     }]
     
+    @staticmethod
+    def _generate_audio_pivot_params(video_id):
+        """
+        Generates sfv_audio_pivot browse params for this video id
+        """
+        pb_params = b'\xf2\x05+\n)\x12\'\n\x0b%b\x12\x0b%b\x1a\x0b%b' % ((video_id.encode(),) * 3)
+        return urllib.parse.quote(base64.b64encode(pb_params).decode())
+
+    def _real_extract(self, url):
+        video_id = self._match_id(url)
+        return self.url_result(
+            f'https://www.youtube.com/feed/sfv_audio_pivot?bp={self._generate_audio_pivot_params(video_id)}',
+            ie=YoutubeTabIE)
     
 class YoutubeRelatedVideosIE(InfoExtractor):
     IE_DESC = 'YouTube Related Videos'
