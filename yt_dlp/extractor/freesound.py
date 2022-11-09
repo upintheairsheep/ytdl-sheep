@@ -92,3 +92,13 @@ class FreesoundPlaylistIE(PlaylistBaseIE):
     _ITEM_RE = r'''(?s)<div\b[^>]+\bclass\s*=\s*("|')sound_filename\1[^>]*>\s*<a\b[^>]+\bclass\s*=\s*("|')title\2[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\3).)+)'''
     _NEXT_RE = r'''<a\b[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\1).)+)[^>]+\btitle\s*=\s*["']Next\s+Page'''
     _ITEM_IE = 'Freesound'
+    ```
+    def _real_extract(self, url):
+    
+       
+        title = self._og_search_property('audio:title', webpage, 'username')
+
+        description = self._html_search_regex(
+            r'(?s)id=["\']sound_description["\'][^>]*>(.+?)</div>',
+            webpage, 'description', fatal=False)
+     ```
