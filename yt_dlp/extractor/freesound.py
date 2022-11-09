@@ -7,7 +7,7 @@ from ..utils import (
     get_element_by_id,
     unified_strdate,
 )
-
+from .playlistbase import PlaylistBaseIE
 
 class FreesoundIE(InfoExtractor):
     _VALID_URL = r'https?://(?:www\.)?freesound\.org/people/[^/]+/sounds/(?P<id>[^/]+)'
@@ -75,3 +75,12 @@ class FreesoundIE(InfoExtractor):
             'tags': tags,
             'formats': formats,
         }
+
+
+class FreesoundPlaylistIE(PlaylistBaseIE):
+    # Source: https://github.com/yt-dlp/yt-dlp/issues/4161#issuecomment-1166157842
+    _VALID_URL = r'https?://(?:www\.)?freesound\.org/people/(?P<person>[^/]+)/(?P<type>downloaded_sounds|packs)/(?P<id>[^/]*)'
+
+    _ITEM_RE = r'''(?s)<div\b[^>]+\bclass\s*=\s*("|')sound_filename\1[^>]*>\s*<a\b[^>]+\bclass\s*=\s*("|')title\2[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\3).)+)'''
+    _NEXT_RE = r'''<a\b[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\1).)+)[^>]+\btitle\s*=\s*["']Next\s+Page'''
+    _ITEM_IE = 'Freesound'
