@@ -27,6 +27,7 @@ class FreesoundIE(InfoExtractor):
     }
 
     def _real_extract(self, url):
+    # Todo: extract copyright info, geotags, and possibly comments
         audio_id = self._match_id(url)
 
         webpage = self._download_webpage(url, audio_id)
@@ -79,6 +80,7 @@ class FreesoundIE(InfoExtractor):
 
 class FreesoundPlaylistIE(PlaylistBaseIE):
     # Source: https://github.com/yt-dlp/yt-dlp/issues/4161#issuecomment-1166157842
+    # Todo: Add metadata: profile pic, info
     _VALID_URL = r'https?://(?:www\.)?freesound\.org/people/(?P<person>[^/]+)/(?P<type>downloaded_sounds|packs)/(?P<id>[^/]*)'
 
     _ITEM_RE = r'''(?s)<div\b[^>]+\bclass\s*=\s*("|')sound_filename\1[^>]*>\s*<a\b[^>]+\bclass\s*=\s*("|')title\2[^>]+\bhref\s*=\s*("|')(?P<url>(?:(?!\3).)+)'''
