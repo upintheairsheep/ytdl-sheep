@@ -45,7 +45,13 @@ class FreesoundIE(InfoExtractor):
         upload_date = unified_strdate(get_element_by_id('sound_date', webpage))
         uploader = self._og_search_property(
             'audio:artist', webpage, 'uploader', fatal=False)
-
+        download_count = self._og_search_property(
+            'download_text', '.b' webpage, 'download_count', fatal=False)
+        ```
+        description = self._html_search_regex(
+            r'(?s)id=["\']download_text["\'][^>]*>(.+?)</div>',
+            webpage, 'download_count', fatal=False)
+        ```
         channels = self._html_search_regex(
             r'Channels</dt><dd>(.+?)</dd>', webpage,
             'channels info', fatal=False)
@@ -73,6 +79,7 @@ class FreesoundIE(InfoExtractor):
             'duration': duration,
             'uploader': uploader,
             'upload_date': upload_date,
+            'download_count': download_count,
             'tags': tags,
             'formats': formats,
         }
