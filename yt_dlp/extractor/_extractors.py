@@ -590,7 +590,10 @@ from .francetv import (
     FranceTVSiteIE,
     FranceTVInfoIE,
 )
-from .freesound import FreesoundIE
+from .freesound import (
+    FreesoundIE,
+    FreesoundPlaylistIE
+)
 from .freespeech import FreespeechIE
 from .frontendmasters import (
     FrontendMastersIE,
