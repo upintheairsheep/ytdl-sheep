@@ -66,6 +66,17 @@ class RobloxIE(InfoExtractor):
         toolbox_asset_data = toolbox_result.get('asset') or {}
         toolbox_creator_data = toolbox_result.get('creator') or {}
         toolbox_audio_data = toolbox_asset_data.get('audioDetails') or {}
+        comment_data = traverse_obj('Comments')
+        comments = [{
+            'author': traverse_obj(comment_dict, ('AuthorName')),
+            'author_id': traverse_obj(comment_dict, ('AuthorId')),
+            'id': traverse_obj(comment_dict, ('Id')),
+            'text': traverse_obj(comment_dict, ('Text')),
+            'time_text': traverse_obj(comment_dict, ('PostedDate')),
+            'author_thumbnail': traverse_obj(comment_dict, ('AuthorThumbnail', 'Url')),
+            'verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
+            'is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
+        } for comment_dict in comment_data] if comment_data else None
 
         info_dict = {
             'id': asset_id,
