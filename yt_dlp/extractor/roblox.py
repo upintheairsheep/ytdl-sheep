@@ -40,8 +40,8 @@ class RobloxIE(InfoExtractor):
     }]
     def _get_comments(self, video_id):
         comments_info = self._download_json(
-            f'https://www.roblox.com/comments/get-json?assetId={_id_to_pk(video_id)}&startindex='10'&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', video_id,
-            fatal=False, errnote='Comments extraction failed', note='Downloading comments', headers=self._API_HEADERS) or {}
+            f'https://www.roblox.com/comments/get-json?assetId={video_id}&startindex=0&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', video_id,
+            fatal=False, errnote='Comments extraction failed', note='Downloading first 10 comments', headers=self._API_HEADERS) or {}
 
         comment_data = traverse_obj(comments_info, ('Comments')
         for comment_dict in comment_data or []:
