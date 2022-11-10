@@ -38,6 +38,24 @@ class RobloxIE(InfoExtractor):
             'modified_timestamp': 1656694893
         },
     }]
+    def _get_comments(self, video_id):
+        comments_info = self._download_json(
+            f'https://www.roblox.com/comments/get-json?assetId={_id_to_pk(video_id)}&startindex='10'&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', video_id,
+            fatal=False, errnote='Comments extraction failed', note='Downloading comments', headers=self._API_HEADERS) or {}
+
+        comment_data = traverse_obj(comments_info, ('Comments')
+        for comment_dict in comment_data or []:
+            yield {
+            'author': traverse_obj(comment_dict, ('AuthorName')),
+            'author_id': traverse_obj(comment_dict, ('AuthorId')),
+            'id': traverse_obj(comment_dict, ('Id')),
+            'text': traverse_obj(comment_dict, ('Text')),
+            'time_text': traverse_obj(comment_dict, ('PostedDate')),
+            'author_thumbnail': traverse_obj(comment_dict, ('AuthorThumbnail', 'Url')),
+            'author_is_verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
+            'author_is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
+        } for comment_dict in comment_data] if comment_data else None
+
 
     def _real_extract(self, url):
         asset_id = self._match_id(url)
@@ -66,7 +84,7 @@ class RobloxIE(InfoExtractor):
         toolbox_asset_data = toolbox_result.get('asset') or {}
         toolbox_creator_data = toolbox_result.get('creator') or {}
         toolbox_audio_data = toolbox_asset_data.get('audioDetails') or {}
-        comment_data = traverse_obj('Comments')
+        comment_data = robloxcomments.traverse_obj('Comments')
         comments = [{
             'author': traverse_obj(comment_dict, ('AuthorName')),
             'author_id': traverse_obj(comment_dict, ('AuthorId')),
@@ -74,8 +92,8 @@ class RobloxIE(InfoExtractor):
             'text': traverse_obj(comment_dict, ('Text')),
             'time_text': traverse_obj(comment_dict, ('PostedDate')),
             'author_thumbnail': traverse_obj(comment_dict, ('AuthorThumbnail', 'Url')),
-            'verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
-            'is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
+            'author_is_verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
+            'author_is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
         } for comment_dict in comment_data] if comment_data else None
 
         info_dict = {
