@@ -66,6 +66,9 @@ class BuzzVideoIE(InfoExtractor):
             'id': video_id,
             }, info, {
             'description': self._og_search_description(webpage),
+            'view_count': self._og_search_property('span.view-num', webpage, view_count, fatal=False),
+            'like_count': self._og_search_property('span.like-num', webpage, like_count, fatal=False),
+            'comment_count': self._og_search_property('span.comment-num', webpage, comment_count, fatal=False),
             'thumbnail': self._og_search_thumbnail(webpage),
             'height': int_or_none(self._og_search_property('video:height', webpage)),
         })
