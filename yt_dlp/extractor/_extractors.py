@@ -238,6 +238,7 @@ from .brightcove import (
 )
 from .businessinsider import BusinessInsiderIE
 from .buzzfeed import BuzzFeedIE
+from .buzzvideo import BuzzVideoIE
 from .byutv import BYUtvIE
 from .c56 import C56IE
 from .cableav import CableAVIE
