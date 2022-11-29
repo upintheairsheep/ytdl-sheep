@@ -6355,7 +6355,7 @@ class YoutubeShortsAudioPivotIE(InfoExtractor):
         'url': 'https://www.youtube.com/source/Lyj-MZSAA9o/shorts',
         'only_matching': True,
     }]
-
+    
     @staticmethod
     def _generate_audio_pivot_params(video_id):
         """
@@ -6369,7 +6369,35 @@ class YoutubeShortsAudioPivotIE(InfoExtractor):
         return self.url_result(
             f'https://www.youtube.com/feed/sfv_audio_pivot?bp={self._generate_audio_pivot_params(video_id)}',
             ie=YoutubeTabIE)
-
+    
+class YoutubeRelatedVideosIE(InfoExtractor):
+    # Source: https://github.com/yt-dlp/yt-dlp/issues/3590#issuecomment-1113900840
+    # Note: I am using this project to learn programming, however do not own a device capable of running python, only a school managed laptop and 2 iOS-based devices with absolutely to money for Pythonsia: expect errors.
+    IE_DESC = 'YouTube Related Videos'
+    IE_NAME = 'youtube:relatedvideos'
+    _VALID_URL = r'r'ytrel(?:ated(?:videos)):(?:https?://(?:www\.)?youtube\.com/watch\?v=)P<id>[0-9A-Za-z_-]{11}$''
+    _TESTS = [{
+        'url': 'ytrelated:https://www.youtube.com/watch?v=CQaEXZ-df6Y',
+        'only_matching': True,
+    }]
+    import requests
+    res = requests.post(
+        "https://youtubei.googleapis.com/youtubei/v1/next/",
+        json={'videoId': 'emrt46SRyYs', 'context': {'client': {'clientName': 'WEB', 'clientVersion': '2.20210223.09.00'}}},
+        params={'key': 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8', 'alt': 'json'},
+        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0)', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive',
+                 'X-YouTube-Client-Name': '1', 'X-YouTube-Client-Version': '2.20210223.09.00', 'Referer': 'https://www.youtube.com/'}
+    )
+    data = res.json()
+    items = data["contents"]["twoColumnWatchNextResults"]["secondaryResults"]["secondaryResults"]["results"]
+    for item in items:
+        if "compactVideoRenderer" in item:
+            if "videoId" in item["compactVideoRenderer"]:
+                vid = item["compactVideoRenderer"]
+                print(vid["videoId"])  # video id
+                print(vid["title"]["simpleText"])  # video title
+                break
+    return self.playlist_result(self._entries(videoId, title) videoId, title)
 
 class YoutubeTruncatedURLIE(InfoExtractor):
     IE_NAME = 'youtube:truncated_url'
