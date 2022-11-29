@@ -25,7 +25,7 @@ class AudiodraftBaseIE(InfoExtractor):
         }
             url_encode = url.encode()
             data_json = self._download_json(
-            'https://api-public.addthis.com/url/shares.json?url=', url_encode,
+            'https://api-public.addthis.com/url/shares.json?url=', url_encode)
             headers={
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'X-Requested-With': 'XMLHttpRequest',
