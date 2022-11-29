@@ -23,6 +23,7 @@ class AudiodraftBaseIE(InfoExtractor):
             'like_count': int_or_none(data_json.get('entry_likes')),
             'average_rating': int_or_none(data_json.get('entry_rating')),
         }
+    def _extract_addthis_sharecount(self, player_entry_id):
             url_encode = url.encode()
             data_json = self._download_json(
             'https://api-public.addthis.com/url/shares.json?url=', url_encode)
