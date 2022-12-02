@@ -398,8 +398,8 @@ class TikTokBaseIE(InfoExtractor):
                     'reply_id': comment.get('reply_id'), # seems reply exclusive, may be the id of the reply
                     'reply_to_reply_id': comment.get('reply_to_reply_id'), # seems exclusive ro replies to replies, may be the id of the reply
                     'author_id': comment.get('user', 'uid'), # user id (possibly aweme id)
-                    'author': comment.get('user', 'nickname'), (user nickname)
-                    'author_handle': comment.get('user', 'unique_id'), (user handle, @ultimatemariofan101 for example without the at symbol)
+                    'author': comment.get('user', 'nickname'), # user nickname
+                    'author_handle': comment.get('user', 'unique_id'), # user handle, @ultimatemariofan101 for example without the at symbol
                     'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list'), 
                     'author_full_info': comment.get('user'),
                 }
