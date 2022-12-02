@@ -368,6 +368,7 @@ class TikTokBaseIE(InfoExtractor):
             }
         }
     def _get_comments(self, aweme_id):
+        # references: https://gist.github.com/theblazehen/25c18eda95165e65fc5159942fb5e4db (uses v1 api), https://github.com/yt-dlp/yt-dlp/issues/5037 (new api documentation)
         comment_json = self._download_json(
             f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&cursor=0&count=50&forward_page_type=1', video_id,
             # 50 is the max comments defined by the API
