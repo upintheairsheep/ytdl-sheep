@@ -372,11 +372,12 @@ class TikTokBaseIE(InfoExtractor):
             f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&cursor=0&count=50&forward_page_type=1', video_id,
             # 50 is the max comments defined by the API
             data=b'', fatal=False, note='Downloading first 50 comments') or {} 
-        last_page_number = traverse_obj(comment_json, ('response', 'comments', 'last_page'))
+        has_more = traverse_obj(comment_json, ('has_more'))
 
-        for i in range(last_page_number):
+        for i in range(has_more):
             if i == 0:
                 comment_data = comment_json
+                note='Comment downloading completed!'
             else:
                 comment_data = self._download_json(
                     f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&count=50&forward_page_type=1', video_id,
@@ -401,6 +402,7 @@ class TikTokBaseIE(InfoExtractor):
                     'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list'), 
                     'author_full_info': comment.get('user'),
                 }
+                # TODO: get replies if reply_comment_total is not zero: https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id=(comment replied to)&item_id=(video id?)&cursor=0&count=20&insert_ids=&top_ids=&channel_id=0
 
 
 class TikTokIE(TikTokBaseIE):
