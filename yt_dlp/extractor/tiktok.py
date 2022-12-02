@@ -379,8 +379,8 @@ class TikTokBaseIE(InfoExtractor):
                 comment_data = comment_json
             else:
                 comment_data = self._download_json(
-                    f'https://api.netverse.id/mediadetails/api/v3/videos/comments/{video_id}', video_id,
-                    data=b'', fatal=False, query={'page': i + 1}, note='Downloading JSON comment metadata') or {}
+                    f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&count=50&forward_page_type=1', video_id,
+                    data=b'', fatal=False, query={'cursor': i + 50}, note='Downloading another page of comments') or {}
             for comment in traverse_obj(comments):
                 yield {
                     'id': comment.get('cid'), # comment ID
@@ -388,16 +388,17 @@ class TikTokBaseIE(InfoExtractor):
                     'text': comment.get('text'),
                     'like_count': comment.get('digg_count'),
                     'timestamp': comment.get('create_time'),
-                    'status': comment.get('status'),
-                    'is_pinned': comment.get('author_pin'),
-                    'lanuage': comment.get('comment_language'),
-                    'text_extra': comment.get('text_extra'),
-                    'reply_count': comment.get('reply_comment_total'),
-                    'reply_id': comment.get('reply_id'),
-                    'author_id': comment.get('user', 'uid'),
-                    'author': comment.get('user', 'nickname'),
-                    'author_handle': comment.get('user', 'unique_id'),
-                    'author_thumbnail': comment.get('user', 'profile_picture'),
+                    'status': comment.get('status'), # number, not known yet
+                    'is_pinned': comment.get('author_pin'), # booleen
+                    'lanuage': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc
+                    'text_extra': comment.get('text_extra'), # includes hashtags, most likely same format as in video metadata
+                    'reply_count': comment.get('reply_comment_total'), 
+                    'reply_id': comment.get('reply_id'), # seems reply exclusive, may be the id of the reply
+                    'reply_to_reply_id': comment.get('reply_to_reply_id'), # seems exclusive ro replies to replies, may be the id of the reply
+                    'author_id': comment.get('user', 'uid'), # user id (possibly aweme id)
+                    'author': comment.get('user', 'nickname'), (user nickname)
+                    'author_handle': comment.get('user', 'unique_id'), (user handle, @ultimatemariofan101 for example without the at symbol)
+                    'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list'), 
                     'author_full_info': comment.get('user'),
                 }
 
