@@ -369,8 +369,9 @@ class TikTokBaseIE(InfoExtractor):
         }
     def _get_comments(self, aweme_id):
         comment_json = self._download_json(
-            f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&cursor=0&count=20&forward_page_type=1', video_id,
-            data=b'', fatal=False, note='Downloading first 50 comments') or {}
+            f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&cursor=0&count=50&forward_page_type=1', video_id,
+            # 50 is the max comments defined by the API
+            data=b'', fatal=False, note='Downloading first 50 comments') or {} 
         last_page_number = traverse_obj(comment_json, ('response', 'comments', 'last_page'))
 
         for i in range(last_page_number):
@@ -380,13 +381,24 @@ class TikTokBaseIE(InfoExtractor):
                 comment_data = self._download_json(
                     f'https://api.netverse.id/mediadetails/api/v3/videos/comments/{video_id}', video_id,
                     data=b'', fatal=False, query={'page': i + 1}, note='Downloading JSON comment metadata') or {}
-            for comment in traverse_obj(comment_data, ('response', 'comments', 'data', ...)):
+            for comment in traverse_obj(comments):
                 yield {
-                    'id': comment.get('_id'),
-                    'text': comment.get('comment'),
-                    'author_id': comment.get('customer_id'),
-                    'author': traverse_obj(comment, ('customer', 'name')),
-                    'author_thumbnail': traverse_obj(comment, ('customer', 'profile_picture')),
+                    'id': comment.get('cid'), # comment ID
+                    'alt_id': comment.get('aweme_id'), # "aweme" id, seems to be tiktok's universal id, we might swap them
+                    'text': comment.get('text'),
+                    'like_count': comment.get('digg_count'),
+                    'timestamp': comment.get('create_time'),
+                    'status': comment.get('status'),
+                    'is_pinned': comment.get('author_pin'),
+                    'lanuage': comment.get('comment_language'),
+                    'text_extra': comment.get('text_extra'),
+                    'reply_count': comment.get('reply_comment_total'),
+                    'reply_id': comment.get('reply_id'),
+                    'author_id': comment.get('user', 'uid'),
+                    'author': comment.get('user', 'nickname'),
+                    'author_handle': comment.get('user', 'unique_id'),
+                    'author_thumbnail': comment.get('user', 'profile_picture'),
+                    'author_full_info': comment.get('user'),
                 }
 
 
