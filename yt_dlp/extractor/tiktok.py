@@ -367,6 +367,27 @@ class TikTokBaseIE(InfoExtractor):
                 'Referer': webpage_url
             }
         }
+    def _get_comments(self, aweme_id):
+        comment_json = self._download_json(
+            f'https://api-h2.tiktokv.com/aweme/v2/comment/list/?aweme_id={video_id}'f'&cursor=0&count=20&forward_page_type=1', video_id,
+            data=b'', fatal=False, note='Downloading first 50 comments') or {}
+        last_page_number = traverse_obj(comment_json, ('response', 'comments', 'last_page'))
+
+        for i in range(last_page_number):
+            if i == 0:
+                comment_data = comment_json
+            else:
+                comment_data = self._download_json(
+                    f'https://api.netverse.id/mediadetails/api/v3/videos/comments/{video_id}', video_id,
+                    data=b'', fatal=False, query={'page': i + 1}, note='Downloading JSON comment metadata') or {}
+            for comment in traverse_obj(comment_data, ('response', 'comments', 'data', ...)):
+                yield {
+                    'id': comment.get('_id'),
+                    'text': comment.get('comment'),
+                    'author_id': comment.get('customer_id'),
+                    'author': traverse_obj(comment, ('customer', 'name')),
+                    'author_thumbnail': traverse_obj(comment, ('customer', 'profile_picture')),
+                }
 
 
 class TikTokIE(TikTokBaseIE):
