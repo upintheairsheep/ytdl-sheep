@@ -405,7 +405,7 @@ class TikTokBaseIE(InfoExtractor):
                     'author': comment.get('user', 'nickname'), # user nickname
                     'author_label': comment.get('label_text'),
                     'author_handle': comment.get('user', 'unique_id'), # user handle, @ultimatemariofan101 for example without the at symbol
-                    'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list'), 
+                    'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list', 0), 
                     'author_full_info': comment.get('user'),
                 }
                 # TODO: get replies if reply_comment_total is not zero: https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id=(comment replied to)&item_id=(video id?)&cursor=0&count=20&insert_ids=&top_ids=&channel_id=0
