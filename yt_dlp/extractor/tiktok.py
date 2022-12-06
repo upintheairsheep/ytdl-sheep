@@ -367,8 +367,45 @@ class TikTokBaseIE(InfoExtractor):
                 'Referer': webpage_url
             }
         }
-    def _get_replies_of_tiktok_comment(self, aweme_id, comment_id)
-        
+    def get_replies_of_tiktok_comment(self, aweme_id, comment_id)
+        reply_json = self._download_json(
+            f'https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id='{comment_id}'f'&item_id='{video_id}'f'&cursor=0&count=20&insert_ids=&top_ids=&channel_id=0
+            # 50 is the max comments defined by the API
+            data=b'', fatal=False, note='Checking if comment has any replies...') or {} 
+        has_more = traverse_obj(reply_json, ('has_more'))
+        commentsnum = len(reply_json['comments'])
+
+        for i in range(has_more) and commentsnum is not 0:
+            if i == 0:
+                comment_data = comment_json
+                note='Comment downloading completed!'
+            else:
+                comment_data = self._download_json(
+                    f'https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id='{comment_id}'f'&item_id='{video_id}'f'&count=50&insert_ids=&top_ids=&channel_id=0
+            # 50 is the max comments defined by the API
+                    data=b'', fatal=False, query={'cursor': i + 50}, note='Downloading replies...') or {}
+            for comment in traverse_obj(comments):
+                yield {
+                    'id': comment.get('cid'), # comment ID
+                    'alt_id': comment.get('aweme_id'), # "aweme" id, seems to be tiktok's universal id, we might swap them
+                    'text': comment.get('text'),
+                    'like_count': comment.get('digg_count'),
+                    'timestamp': comment.get('create_time'),
+                    'status': comment.get('status'), # number, not known yet
+                    'is_pinned': comment.get('author_pin'), # booleen
+                    'is_hidden': comment.get('no_show'), # booleen
+                    'lanuage': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc
+                    'text_extra': comment.get('text_extra'), # includes hashtags, most likely same format as in video metadata
+                    'reply_count': comment.get('reply_comment_total'), 
+                    'reply_id': comment.get('reply_id'), # seems reply exclusive, may be the id of the reply
+                    'reply_to_reply_id': comment.get('reply_to_reply_id'), # seems exclusive ro replies to replies, may be the id of the reply
+                    'author_id': comment.get('user', 'uid'), # user id (possibly aweme id)
+                    'author': comment.get('user', 'nickname'), # user nickname
+                    'author_label': comment.get('label_text'),
+                    'author_handle': comment.get('user', 'unique_id'), # user handle, @ultimatemariofan101 for example without the at symbol
+                    'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list', 0), 
+                    'author_full_info': comment.get('user'),
+                }
     def _get_comments(self, aweme_id):
         # references: https://gist.github.com/theblazehen/25c18eda95165e65fc5159942fb5e4db (uses v1 api), https://github.com/yt-dlp/yt-dlp/issues/5037 (new api documentation)
         comment_json = self._download_json(
@@ -408,6 +445,9 @@ class TikTokBaseIE(InfoExtractor):
                     'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list', 0), 
                     'author_full_info': comment.get('user'),
                 }
+             for comment in traverse_obj(comments):
+                if comment.get('reply_comment_total') > 0
+                    get_replies_of_tiktok_comment(self, {video_id}, i)
                 # TODO: get replies if reply_comment_total is not zero: https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id=(comment replied to)&item_id=(video id?)&cursor=0&count=20&insert_ids=&top_ids=&channel_id=0
 
 
