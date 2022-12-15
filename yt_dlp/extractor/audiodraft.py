@@ -23,6 +23,7 @@ class AudiodraftBaseIE(InfoExtractor):
             'like_count': int_or_none(data_json.get('entry_likes')),
             'average_rating': int_or_none(data_json.get('entry_rating')),
         }
+    '''
     def _extract_addthis_sharecount(self, player_entry_id):
             '.encode('utf-8'))
             url_encode = url.encode()
@@ -36,6 +37,7 @@ class AudiodraftBaseIE(InfoExtractor):
         return {
             'repost_count': data_json.get('shares'),
         }
+    '''
 
 
 class AudiodraftCustomIE(AudiodraftBaseIE):
