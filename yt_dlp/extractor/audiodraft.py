@@ -111,7 +111,8 @@ class AudiodraftGenericIE(AudiodraftBaseIE):
             'skip_download': True,
         },
         'expected_warnings': ['Withdrawn by the composer'],
-        }'''
+        }
+        '''
     }]
 
     def _real_extract(self, url):
