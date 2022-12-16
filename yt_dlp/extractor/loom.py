@@ -120,6 +120,10 @@ class LoomIE(LoomBaseInfoIE):
             'description': info.get('description'),
             'uploader': info.get('owner_full_name'),
             'timestamp': unified_timestamp(info.get('createdAt'))
+            'modified_timestamp': unified_timestamp(info.get('updatedAt'))
+            'deleted_timestamp': unified_timestamp(info.get('deletedAt'))
+            'view_count': info.get('total_views'),
+            'distinct_view_count': info.get('distinct_views'),
         }
 
 
