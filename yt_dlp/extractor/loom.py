@@ -109,6 +109,7 @@ class LoomIE(LoomBaseInfoIE):
 
         return {
             'id': info.get('id') or video_id,
+            'alt_id': info.get('s3_id'),
             'title': info.get('name'),
             'formats': formats,
             'thumbnails': [
@@ -119,11 +120,14 @@ class LoomIE(LoomBaseInfoIE):
             ],
             'description': info.get('description'),
             'uploader': info.get('owner_full_name'),
+            'uploader_id': info.get('owner_id'),
             'timestamp': unified_timestamp(info.get('createdAt'))
             'modified_timestamp': unified_timestamp(info.get('updatedAt'))
-            'deleted_timestamp': unified_timestamp(info.get('deletedAt'))
             'view_count': info.get('total_views'),
             'distinct_view_count': info.get('distinct_views'),
+            'availibility': info.get('privacy'),
+            'playlist_id': info.get('folder_id'),
+            'location': info.get('ownerDomain'),
         }
 
 
