@@ -445,10 +445,11 @@ class TikTokBaseIE(InfoExtractor):
                     'author_thumbnail': comment.get('user', 'avatar_larger', 'url_list', 0), 
                     'author_full_info': comment.get('user'),
                 }
-             for comment in traverse_obj(comments):
-                if comment.get('reply_comment_total') > 0
-                    get_replies_of_tiktok_comment(self, {video_id}, i)
-                # TODO: get replies if reply_comment_total is not zero: https://api-h2.tiktokv.com/aweme/v1/comment/list/reply/?comment_id=(comment replied to)&item_id=(video id?)&cursor=0&count=20&insert_ids=&top_ids=&channel_id=0
+                if self._configuration_arg('no_tiktok_replies') is None:
+                    for comment in traverse_obj(comments):
+                        if comment.get('reply_comment_total') > 0
+                            get_replies_of_tiktok_comment(self, {video_id}, i)
+
 
 
 class TikTokIE(TikTokBaseIE):
