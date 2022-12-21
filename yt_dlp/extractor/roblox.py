@@ -39,9 +39,9 @@ class RobloxIE(InfoExtractor):
         },
     }]
     def _get_comments(self, video_id):
-    start_index = 0
-    comments = []
-    while True:
+     start_index = 0
+     comments = []
+     while True:
         # Download the comments info in JSON format
         comments_info = self._download_json(
             f'https://www.roblox.com/comments/get-json?assetId={video_id}&startindex={start_index}&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', 
