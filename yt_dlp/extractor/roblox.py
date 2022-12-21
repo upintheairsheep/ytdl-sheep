@@ -39,23 +39,38 @@ class RobloxIE(InfoExtractor):
         },
     }]
     def _get_comments(self, video_id):
-        # TODO: change startindex by 10 and download until there are 0 items in "Comments" from the JSON, then stop.
+    start_index = 0
+    comments = []
+    while True:
+        # Download the comments info in JSON format
         comments_info = self._download_json(
-            f'https://www.roblox.com/comments/get-json?assetId={video_id}&startindex=0&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', video_id,
-            fatal=False, errnote='Comments extraction failed', note='Downloading first 10 comments', headers=self._API_HEADERS) or {}
+            f'https://www.roblox.com/comments/get-json?assetId={video_id}&startindex={start_index}&thumbnailWidth=100&thumbnailHeight=100&thumbnailFormat=PNG&cachebuster=3086', 
+            video_id,
+            fatal=False, errnote='Comments extraction failed', note='Downloading comments', headers=self._API_HEADERS) or {}
 
-        comment_data = traverse_obj(comments_info, ('Comments')
-        for comment_dict in comment_data or []:
-            yield {
-            'author': traverse_obj(comment_dict, ('AuthorName')),
-            'author_id': traverse_obj(comment_dict, ('AuthorId')),
-            'id': traverse_obj(comment_dict, ('Id')),
-            'text': traverse_obj(comment_dict, ('Text')),
-            'time_text': traverse_obj(comment_dict, ('PostedDate')),
-            'author_thumbnail': traverse_obj(comment_dict, ('AuthorThumbnail', 'Url')),
-            'author_is_verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
-            'author_is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
-        } for comment_dict in comment_data] if comment_data else None
+        # Extract the list of comments from the JSON data
+        comment_data = traverse_obj(comments_info, ('Comments'))
+        if not comment_data:
+            # If there are no more comments, exit the loop
+            break
+
+        # Iterate through the list of comments and extract the relevant information
+        for comment_dict in comment_data:
+            comments.append({
+                'author': traverse_obj(comment_dict, ('AuthorName')),
+                'author_id': traverse_obj(comment_dict, ('AuthorId')),
+                'id': traverse_obj(comment_dict, ('Id')),
+                'text': traverse_obj(comment_dict, ('Text')),
+                'time_text': traverse_obj(comment_dict, ('PostedDate')),
+                'author_thumbnail': traverse_obj(comment_dict, ('AuthorThumbnail', 'Url')),
+                'author_is_verified': traverse_obj(comment_dict, ('HasVerifiedBadge')),
+                'author_is_subscribed': traverse_obj(comment_dict, ('ShowAuthorOwnsAsset')),
+            })
+
+        # Increment the start index to download the next batch of comments
+        start_index += 10
+
+    return comments
 
 
     def _real_extract(self, url):
