@@ -389,17 +389,14 @@ class TikTokBaseIE(InfoExtractor):
                 'text': comment.get('text'),
                 'like_count': comment.get('digg_count'),
                 'timestamp': comment.get('create_time'),
-                'status': comment.get('status'), # number, not known yet
                 'is_pinned': comment.get('author_pin'), # booleen
                 'is_hidden': comment.get('no_show'), # booleen
-                'lanuage': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc
+                'lang': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc. shortened to lang as its more common and saves disk space
                 'text_extra': comment.get('text_extra'), # includes hashtags, most likely same format as in video metadata
                 'reply_count': comment.get('reply_comment_total'), 
-                'reply_id': comment.get('reply_id'), # seems reply exclusive, may be the id of the reply
-                'reply_to_reply_id': comment.get('reply_to_reply_id'), # seems exclusive ro replies to replies, may be the id of the reply
                 'author_id': comment['user']['uid'], # user id (possibly aweme id)
                 'author': comment['user']['nickname'], # user nickname
-                'author_label': comment.get('label_text'),
+                'author_label': comment.get('label_text'), 
                 'author_handle': comment['user']['unique_id'], # user handle, @ultimatemariofan101 for example without the at symbol
                 'author_thumbnail': comment['user']['avatar_larger']['url_list'][0], 
                 'author_full_info': comment.get('user'),
@@ -428,14 +425,13 @@ def _get_comments(self, aweme_id):
                 'text': comment.get('text'),
                 'like_count': comment.get('digg_count'),
                 'timestamp': comment.get('create_time'),
-                'status': comment.get('status'), # number, not known yet
                 'is_pinned': comment.get('author_pin'), # booleen
                 'is_hidden': comment.get('no_show'), # booleen
-                'lanuage': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc
+                'lang': comment.get('comment_language'), # 2 letter language code: en, jp, fr, etc
                 'text_extra': comment.get('text_extra'), # includes hashtags, most likely same format as in video metadata
                 'reply_count': comment.get('reply_comment_total'), 
-                'reply_id': comment.get('reply_id'), # seems reply exclusive, may be the id of the reply
-                'reply_to_reply_id': comment.get('reply_to_reply_id'), # seems exclusive ro replies to replies, may be the id of the reply
+                'parent': comment.get('reply_id'), # parent comment if
+                'parent_reply': comment.get('reply_to_reply_id'), # exclusive to replies to replies
                 'author_id': comment['user']['uid'], # user id (possibly aweme id)
                 'author': comment['user']['nickname'], # user nickname
                 'author_label': comment.get('label_text'),
